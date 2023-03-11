@@ -16,10 +16,12 @@ struct Student {
 };
 
 struct ScoreTable {
-    std::vector<Student> v;
     void insert(const std::string_view name, int score1, int score2, int score3) {
         v.push_back(Student(name, score1, score2, score3));
     }
+private:
+    std::vector<Student> v;
+    friend std::ostream& operator<<(std::ostream& os, const ScoreTable& st);
 };
 
 std::ostream& operator<<(std::ostream& os, const ScoreTable& st) {
