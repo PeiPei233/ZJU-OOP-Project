@@ -20,56 +20,59 @@ struct ScoreTable {
     void insert(const std::string_view name, int score1, int score2, int score3) {
         v.push_back(Student(name, score1, score2, score3));
     }
-    void print() const {
-        std::cout << std::left << std::setw(8) << "no"
-                  << std::setw(8) << "name"
-                  << std::setw(8) << "score1"
-                  << std::setw(8) << "score2"
-                  << std::setw(8) << "score3"
-                  << std::setw(8) << "average" << std::endl;
-        double average1{}, average2{}, average3{};
-        int min1{5}, min2{5}, min3{5};
-        int max1{}, max2{}, max3{};
-        for (int i{}; i < v.size(); i++) {
-            std::cout << std::left << std::setw(8) << i + 1
-                      << std::setw(8) << v[i].name.substr(0, 7)
-                      << std::setw(8) << v[i].score1
-                      << std::setw(8) << v[i].score2
-                      << std::setw(8) << v[i].score3
-                      << std::setw(8) << v[i].average << std::endl;
-            average1 += v[i].score1;
-            average2 += v[i].score2;
-            average3 += v[i].score3;
-            if (v[i].score1 < min1) min1 = v[i].score1;
-            if (v[i].score2 < min2) min2 = v[i].score2;
-            if (v[i].score3 < min3) min3 = v[i].score3;
-            if (v[i].score1 > max1) max1 = v[i].score1;
-            if (v[i].score2 > max2) max2 = v[i].score2;
-            if (v[i].score3 > max3) max3 = v[i].score3;
-        }
-        average1 /= v.size();
-        average2 /= v.size();
-        average3 /= v.size();
-        std::cout << std::left << std::setw(8) << ""
-                  << std::setw(8) << "average"
-                  << std::setw(8) << average1
-                  << std::setw(8) << average2
-                  << std::setw(8) << average3
-                  << std::setw(8) << "" << std::endl;
-        std::cout << std::left << std::setw(8) << ""
-                  << std::setw(8) << "min"
-                  << std::setw(8) << min1
-                  << std::setw(8) << min2
-                  << std::setw(8) << min3
-                  << std::setw(8) << "" << std::endl;
-        std::cout << std::left << std::setw(8) << ""
-                  << std::setw(8) << "max"
-                  << std::setw(8) << max1
-                  << std::setw(8) << max2
-                  << std::setw(8) << max3
-                  << std::setw(8) << "" << std::endl;
-    }
 };
+
+std::ostream& operator<<(std::ostream& os, const ScoreTable& st) {
+    os << std::left << std::setw(8) << "no"
+       << std::setw(8) << "name"
+       << std::setw(8) << "score1"
+       << std::setw(8) << "score2"
+       << std::setw(8) << "score3"
+       << std::setw(8) << "average" << std::endl;
+    double average1{}, average2{}, average3{};
+    int min1{5}, min2{5}, min3{5};
+    int max1{}, max2{}, max3{};
+    for (int i{}; i < st.v.size(); i++) {
+        os << std::left << std::setw(8) << i + 1
+           << std::setw(8) << st.v[i].name.substr(0, 7)
+           << std::setw(8) << st.v[i].score1
+           << std::setw(8) << st.v[i].score2
+           << std::setw(8) << st.v[i].score3
+           << std::setw(8) << st.v[i].average << std::endl;
+        average1 += st.v[i].score1;
+        average2 += st.v[i].score2;
+        average3 += st.v[i].score3;
+        if (st.v[i].score1 < min1) min1 = st.v[i].score1;
+        if (st.v[i].score2 < min2) min2 = st.v[i].score2;
+        if (st.v[i].score3 < min3) min3 = st.v[i].score3;
+        if (st.v[i].score1 > max1) max1 = st.v[i].score1;
+        if (st.v[i].score2 > max2) max2 = st.v[i].score2;
+        if (st.v[i].score3 > max3) max3 = st.v[i].score3;
+    }
+    average1 /= st.v.size();
+    average2 /= st.v.size();
+    average3 /= st.v.size();
+    os << std::left << std::setw(8) << ""
+       << std::setw(8) << "average"
+       << std::setw(8) << average1
+       << std::setw(8) << average2
+       << std::setw(8) << average3
+       << std::setw(8) << "" << std::endl;
+    os << std::left << std::setw(8) << ""
+       << std::setw(8) << "min"
+       << std::setw(8) << min1
+       << std::setw(8) << min2
+       << std::setw(8) << min3
+       << std::setw(8) << "" << std::endl;
+    os << std::left << std::setw(8) << ""
+       << std::setw(8) << "max"
+       << std::setw(8) << max1
+       << std::setw(8) << max2
+       << std::setw(8) << max3
+       << std::setw(8) << "" << std::endl;
+    return os;
+}
+
 /*
 Input Sample:
 
@@ -101,7 +104,7 @@ int main() {
         }
         st.insert(name, score1, score2, score3);
     }
-    st.print();
+    std::cout << st;
 
     return 0;
 }
