@@ -130,25 +130,39 @@ std::vector<std::string> split(const std::string& str) {
     return res;
 }
 
+/*
+Input Sample:
+Alice Algorithms 5 Math 4 DataStructures 2
+Alice DataStructures
+Bob DataStructures 3 Algorithms 4 History 4
+Charlie English 5 Algorithms 3 Physics 4
+David Biology 4 History 5 Math 4
+Emma History 4 Biology 4 English 4
+Frank Math 4 English 5 Biology 3
+Grace DataStructures 5 Physics 4 Algorithms 5
+Henry Biology 3 Physics 5 History 4
+Ivy English 3 DataStructures 3 Physics 3
+John DataStructures A+ Algorithms 2 English 2
+John DataStructures 3 Algorithms 1
+*/
+
 int main() {
 
     std::string line;
     ScoreTable table;
     // Read the input
     while (std::getline(std::cin, line)) {
-        if (line.empty()) {
-            break;
-        }
+        if (line.empty()) continue;
         auto info = split(line);
         table.addStudent(info[0]);
         for (size_t i = 1; i < info.size(); i += 2) {
             if (i + 1 >= info.size()) {
-                std::cout << "Lack of score for course " << info[i] << std::endl;
+                std::cout << "Lack of score for course " << info[i] << " taken by " << info[0] << std::endl;
             } else {
                 try {
                     table.addScore(info[0], info[i], std::stoi(info[i + 1]));
                 } catch (const std::invalid_argument& e) {
-                    std::cerr << "Invalid score " << info[i + 1] << " for course " << info[i] << std::endl;
+                    std::cout << "Invalid score " << info[i + 1] << " for course " << info[i] << " taken by " << info[0] << std::endl;
                     continue;
                 }
             }
