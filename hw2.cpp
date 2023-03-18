@@ -5,6 +5,7 @@
 #include<string>
 #include<vector>
 
+// Store the information of a student
 struct Student {
     std::string name;
     size_t no;
@@ -17,10 +18,11 @@ struct Student {
     }
 };
 
+// Store the table of scores
 struct ScoreTable {
-    std::map<std::string, Student> students;
-    std::set<std::string> courses;
-    std::map<size_t, std::string> Snos;
+    std::map<std::string, Student> students;    // Map from student name to student
+    std::set<std::string> courses;              // Set of courses
+    std::map<size_t, std::string> Snos;         // Map from student number to student name
     void addStudent(const std::string& name) {
         students.insert({name, Student(name, students.size() + 1)});
         Snos.insert({students.size(), name});
@@ -29,6 +31,7 @@ struct ScoreTable {
         if (students.count(name) == 0) {
             addStudent(name);
         }
+        // If the student has already taken the course, update the score
         if (students.at(name).scores.count(course) != 0) {
             students.at(name).tot_score -= students.at(name).scores.at(course);
             students.at(name).scores.at(course) = score;
@@ -44,6 +47,7 @@ struct ScoreTable {
     }
 };
 
+// Store the information of a course
 struct CourseInfo {
     int tot_score;
     int num_students;
@@ -55,8 +59,10 @@ struct CourseInfo {
     }
 };
 
+// Print the table of scores
 std::ostream& operator<<(std::ostream& os, const ScoreTable& table) {
     std::map<std::string, CourseInfo> courses;
+    // Print the header
     os << std::left << std::setw(8) << "no"
        << std::setw(8) << "name";
     for (const auto& c : table.courses) {
@@ -64,15 +70,18 @@ std::ostream& operator<<(std::ostream& os, const ScoreTable& table) {
     }
     os << std::setw(8) << "average" << std::endl;
 
+    // Print the scores sorted by student number
     for (size_t i = 0; i < table.students.size(); i++) {
         auto name = table.Snos.at(i + 1);
         os << std::setw(8) << i + 1
            << std::setw(8) << name.substr(0, 7);
         for (const auto& c : table.courses) {
+            // If the student has not taken the course, print "-"
             if (table.students.at(name).scores.count(c) == 0) {
                 os << std::setw(8) << "-";
             } else {
                 os << std::setw(8) << table.students.at(name).scores.at(c);
+                // Update the information of the course
                 courses[c].tot_score += table.students.at(name).scores.at(c);
                 courses[c].num_students++;
                 courses[c].min_score = std::min(courses[c].min_score, table.students.at(name).scores.at(c));
@@ -82,6 +91,7 @@ std::ostream& operator<<(std::ostream& os, const ScoreTable& table) {
         os << std::setw(8) << table.students.at(name).average() << std::endl;
     }
     
+    // Print the average, min, and max scores of each course
     os << std::setw(8) << ""
        << std::setw(8) << "average";
     for (const auto& c : table.courses) {
@@ -106,6 +116,7 @@ std::ostream& operator<<(std::ostream& os, const ScoreTable& table) {
     return os;
 }
 
+// Split a string into a vector of strings
 std::vector<std::string> split(const std::string& str) {
     std::vector<std::string> res;
     size_t start = 0;
@@ -123,6 +134,7 @@ int main() {
 
     std::string line;
     ScoreTable table;
+    // Read the input
     while (std::getline(std::cin, line)) {
         if (line.empty()) {
             break;
